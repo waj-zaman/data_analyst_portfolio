@@ -17,7 +17,6 @@ import UpdateBlog from "./pages/UpdateBlogPostPage";
 import BlogDetail from "./pages/BlogDetail";
 
 function App() {
-  console.log("VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFBDE]">
