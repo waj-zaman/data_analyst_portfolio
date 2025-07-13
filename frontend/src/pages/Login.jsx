@@ -36,7 +36,7 @@ export default function Login() {
         throw new Error("Unexpected response format.");
       }
 
-      console.log("Login successful:", data);
+      console.log("Login successful:");
       alert("Logged in successfully!");
       navigate(location.state?.from?.pathname || "/");
 
