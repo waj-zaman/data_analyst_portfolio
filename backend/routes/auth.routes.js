@@ -74,7 +74,7 @@ router.post("/logout", async (req, res) => {
       httpOnly: true,
       expires: new Date(0),
       sameSite: "none",
-      secure: true
+      secure: process.env.NODE_ENV === "production",
     });
 
     return res.status(200).json({ message: "Logged out successfully." });
