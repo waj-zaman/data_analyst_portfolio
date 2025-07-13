@@ -14,46 +14,48 @@ import codewars from "./routes/codewars.routes.js"
 import blogRoutes from "./routes/blog.routes.js"
 
 dotenv.config();
-const port = process.env.PORT;
+const port = process.env.PORT || 4000;
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
 
-// Add production security middleware
+// Add security middleware in production
 if (process.env.NODE_ENV === 'production') {
   app.use(helmet());
   app.use(morgan('common'));
 }
 
+// ✅ Set allowed frontend origin from env
 const allowedOrigins = [
-  'http://localhost:5173',
-  'https://wajahath-zaman.netlify.app'
+  process.env.FRONTEND_URL,
+  'http://localhost:5173'
 ];
 
+// ✅ Simplified and reliable CORS
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-    callback(new Error('Not allowed by CORS'));
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-
-// Routes
+// ✅ Routes
 app.use("/api/auth", authRoutes)
 app.use("/api/projects", projects)
 app.use("/api/leetcode", leetcode)
 app.use("/api/codewars", codewars)
 app.use("/api/blogs", blogRoutes)
 
-// Server
+// ✅ Start server
 app.listen(port, () => {
-    connectDB();
-    console.log(`Server running at port: ${port}`)
+  connectDB();
+  console.log(`Server running at port: ${port}`);
 });
