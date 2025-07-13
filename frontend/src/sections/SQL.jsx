@@ -3,6 +3,7 @@ import api from "../utilities/api.js";
 import leetcodeImg from "../assets/leetcode.png";
 
 function SQL() {
+  console.log(api + "/leetcode/wajahathzaman")
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
