@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from "react";
 import emailjs from '@emailjs/browser';
-import linkedIn from "../assets/linkedIn.png";
+import linkedIn from "../assets/linkedin.png";
 import twitter from "../assets/icons8-x-50 (1).png";
 
 const Contact = forwardRef((props, ref) => {
