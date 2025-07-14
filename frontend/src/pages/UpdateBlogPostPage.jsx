@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import api from "../utilities/api.js";
 
 export default function UpdateBlogPostPage() {
   const { id } = useParams();
@@ -15,12 +16,11 @@ export default function UpdateBlogPostPage() {
 
   // ✅ 1. Fetch existing post details
   useEffect(() => {
-    fetch(`http://localhost:4000/api/blogs/${id}`, { credentials: "include" })
-      .then((res) => res.json())
-      .then((data) => {
-        setTitle(data.title || "");
-        setAuthor(data.author || "");
-        setContentBlocks(data.contentBlocks || []);
+    api.get(`/blogs/${id}`, { withCredentials: true })
+      .then((res) => {
+        setTitle(res.data.title || "");
+        setAuthor(res.data.author || "");
+        setContentBlocks(res.data.contentBlocks || []);
       })
       .catch((err) => console.error("Error fetching post:", err))
       .finally(() => setLoading(false));
@@ -79,23 +79,19 @@ export default function UpdateBlogPostPage() {
         if (file) formData.append("images", file);
       });
 
-      const response = await fetch(`http://localhost:4000/api/blogs/${id}`, {
-        method: "PUT",
-        credentials: "include",
-        body: formData
+      await api.put(`/blogs/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Unknown error");
-      }
 
       alert("Blog post updated successfully!");
       navigate("/blogs");
 
     } catch (err) {
       console.error("Error updating post:", err);
-      alert("Failed to update post: " + err.message);
+      alert("Failed to update post: " + (err.response?.data?.error || err.message));
     }
   };
 

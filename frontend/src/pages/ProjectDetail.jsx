@@ -32,7 +32,7 @@ function ProjectDetail() {
         <h3 className="font-heading font-bold text-2xl sm:text-3xl pt-6 pb-4">
           Description:
         </h3>
-        <p className="font-body text-lg sm:text-xl text-slate-300 leading-relaxed">
+        <p className="font-body text-lg sm:text-xl text-base-100 leading-relaxed">
           {project.description}
         </p>
       </div>

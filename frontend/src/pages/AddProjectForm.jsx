@@ -55,38 +55,34 @@ export default function AddProjectForm() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("description", description);
-      formData.append("technologies", technologies);
-      formData.append("githubLink", githubLink);
-      formData.append("tableauLink", tableauLink);
-      formData.append("imageUrl", imageUrl);
-      steps.forEach((step, index) => {
-        formData.append(`steps[${index}]`, step);
-      });
+  try {
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("technologies", technologies);
+    formData.append("githubLink", githubLink);
+    formData.append("tableauLink", tableauLink);
+    formData.append("imageUrl", imageUrl);
+    steps.forEach((step, index) => {
+      formData.append(`steps[${index}]`, step);
+    });
 
-      const response = await fetch("http://localhost:4000/api/projects/add", {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Unknown error");
+    await api.post("/projects/add", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
       }
+    });
 
-      alert("Project added successfully!");
-      navigate("/projects");
-    } catch (err) {
-      console.error("Error adding project:", err);
-      alert("Failed to add project: " + err.message);
-    }
-  };
+    alert("Project added successfully!");
+    navigate("/projects");
+  } catch (err) {
+    console.error("Error adding project:", err);
+    alert("Failed to add project: " + (err.response?.data?.error || err.message));
+  }
+};
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-base-200 px-4">

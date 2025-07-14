@@ -71,54 +71,50 @@ export default function AddBlogPostPage() {
 
   // Submit form
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!title.trim()) {
-      alert("Please provide a title for your blog post.");
-      return;
-    }
+  if (!title.trim()) {
+    alert("Please provide a title for your blog post.");
+    return;
+  }
 
-    const hasParagraph = contentBlocks.some(block => block.type === "paragraph" && block.value.trim() !== "");
-    if (!hasParagraph) {
-      alert("Please add at least one paragraph to your blog post.");
-      return;
-    }
+  const hasParagraph = contentBlocks.some(block => block.type === "paragraph" && block.value.trim() !== "");
+  if (!hasParagraph) {
+    alert("Please add at least one paragraph to your blog post.");
+    return;
+  }
 
-    // Transform blocks to expected format
-    const transformedBlocks = contentBlocks.map(block => ({
-      type: block.type,
-      content: block.value
-    }));
+  // Transform blocks to expected format
+  const transformedBlocks = contentBlocks.map(block => ({
+    type: block.type,
+    content: block.value
+  }));
 
-    try {
-      const formData = new FormData();
-      formData.append("title", title.trim());
-      formData.append("author", author.trim());
-      formData.append("contentMeta", JSON.stringify(transformedBlocks));
+  try {
+    const formData = new FormData();
+    formData.append("title", title.trim());
+    formData.append("author", author.trim());
+    formData.append("contentMeta", JSON.stringify(transformedBlocks));
 
-      images.forEach(file => {
-        formData.append("images", file);
-      });
+    images.forEach(file => {
+      formData.append("images", file);
+    });
 
-      const response = await fetch("http://localhost:4000/api/blogs", {
-        method: "POST",
-        credentials: "include",
-        body: formData
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Unknown error");
+    await api.post("/blogs", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data"
       }
+    });
 
-      alert("Blog post added successfully!");
-      navigate("/blogs");
+    alert("Blog post added successfully!");
+    navigate("/blogs");
 
-    } catch (err) {
-      console.error("Error adding post:", err);
-      alert("Failed to add post: " + err.message);
-    }
-  };
+  } catch (err) {
+    console.error("Error adding post:", err);
+    alert("Failed to add post: " + (err.response?.data?.error || err.message));
+  }
+};
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center">
