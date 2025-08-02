@@ -38,7 +38,7 @@ function ProjectCard({ project, isLoggedIn, onDelete }) {
             to={`/projects/${project._id}`}
             className="btn btn-outline text-white border-white hover:bg-white hover:text-black text-lg"
           >
-            View Project
+            View Dashboard
           </Link>
 
           {isLoggedIn && (

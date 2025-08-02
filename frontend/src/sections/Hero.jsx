@@ -12,8 +12,7 @@ function Hero({ onContactClick }) {
             Wajahath Zaman
           </h1>
           <p className="text-slate-600 text-lg md:text-xl font-body mb-6">
-            A data analyst who turns raw data into strategic insights using tools like SQL, Python, Excel, and Tableau — empowering business decisions with clarity, confidence, and real-world impact.
-          </p>
+Developer. Analyst. Problem-solver. I use the web and data to build, explain, and deliver solutions that make a difference.          </p>
           <button
             onClick={onContactClick}
             className="btn btn-outline text-black text-lg md:text-xl mt-2 md:mt-4 font-heading hover:text-[#FFFBDE] px-6 py-3"

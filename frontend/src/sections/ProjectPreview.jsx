@@ -32,7 +32,7 @@ function ProjectPreview() {
             to="/projects"
             className="btn btn-outline hover:bg-[#FFFBDE] hover:text-base-200 text-lg md:text-xl rounded-lg font-heading"
           >
-            All Projects
+            All Dashboards
           </Link>
         </div>
       </section>

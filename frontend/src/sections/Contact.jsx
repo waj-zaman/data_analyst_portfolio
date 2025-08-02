@@ -3,7 +3,7 @@ import emailjs from '@emailjs/browser';
 import linkedIn from "../assets/linkedin.png";
 import twitter from "../assets/icons8-x-50 (1).png";
 
-const Contact = forwardRef((props, ref) => {
+const Contact = forwardRef(({isMernActive }, ref) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
@@ -51,10 +51,23 @@ const Contact = forwardRef((props, ref) => {
     >
       {/* Social icons and text */}
       <div className="flex flex-col justify-center w-full lg:w-1/2 text-center lg:text-left">
-        <h1 className="font-heading text-3xl font-bold mb-4">Data can talk!</h1>
-        <p className="max-w-xl text-xl font-body mx-auto lg:mx-0">
-          Every data has a story to tell, and I'm here to let it communicate with you. Let's connect to transform your raw information into clear, actionable insights that drive strategic success. I'm excited to discuss how we can unlock the full potential of your data.
-        </p>
+        {isMernActive ?
+          (
+            <>
+              <h1 className="font-heading text-3xl font-bold mb-4">The Digital Presence!</h1>
+              <p className="max-w-xl text-xl font-body mx-auto lg:mx-0">
+                The web is a conversation, and I'm here to build the platform. Let's connect to create a seamless, intuitive experience that transforms your ideas into a dynamic and engaging reality. I'm excited to discuss how we can build a digital presence that truly connects with your audience.
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="font-heading text-3xl font-bold mb-4">Data can talk!</h1>
+              <p className="max-w-xl text-xl font-body mx-auto lg:mx-0">
+                Every data has a story to tell, and I'm here to let it communicate with you. Let's connect to transform your raw information into clear, actionable insights that drive strategic success. I'm excited to discuss how we can unlock the full potential of your data.
+              </p>
+            </>
+          )}
+
         <div className="flex mt-10 justify-center lg:justify-start gap-8">
           <a href="https://www.linkedin.com/in/zaman-wajahath" target="_blank" rel="noopener noreferrer">
             <img className="w-12" src={linkedIn} alt="LinkedIn" />
@@ -134,3 +147,11 @@ const Contact = forwardRef((props, ref) => {
 });
 
 export default Contact;
+
+// <h1 className="font-heading text-3xl text-center font-bold mb-4">The Digital Presence!</h1>
+//         <p className="max-w-xl text-xl font-body mx-auto lg:mx-0">
+// The web is a conversation, and I'm here to build the platform. Let's connect to create a
+// seamless, intuitive experience that transforms your ideas into a dynamic and engaging
+// reality. I'm excited to discuss how we can build a digital presence that truly connects
+// with your audience.
+//         </p>

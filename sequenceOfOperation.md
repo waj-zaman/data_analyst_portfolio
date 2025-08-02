@@ -163,3 +163,20 @@ In the home page there are 5 sections which are created in a folder called secti
 - SQL section where the leetcode api is being used to get the problem solving detail from leetcode for SQL
 - Python section where the codewars api is being used to get the problem solving details from codewars for python
 - Then A contact me section where i am using the emailJS package for emails.
+
+
+### Adding a new feature steps:
+
+1. Go to the path of the project and then check these git commands.
+```console
+    git status        # Shows current branch
+    git checkout main # Go to main branch (if not already there)
+    git pull origin main # Get latest code from GitHub main
+```
+
+2. Create a new feature branch.
+```console
+    git checkout -b feature/toggle-content-mode
+```
+
+3. Open the code and make the changes in that code where ever required.

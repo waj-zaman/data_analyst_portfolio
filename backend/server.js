@@ -12,6 +12,7 @@ import projects from "./routes/projects.routes.js"
 import leetcode from "./routes/leetcode.routes.js"
 import codewars from "./routes/codewars.routes.js"
 import blogRoutes from "./routes/blog.routes.js"
+import techIconsRoute from './routes/techIcons.routes.js';
 
 dotenv.config();
 const port = process.env.PORT || 4000;
@@ -38,7 +39,6 @@ const allowedOrigins = [
 // ✅ Simplified and reliable CORS
 app.use(cors({
   origin: function (origin, callback) {
-    console.log(process.env.FRONTEND_URL);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -56,6 +56,7 @@ app.use("/api/projects", projects)
 app.use("/api/leetcode", leetcode)
 app.use("/api/codewars", codewars)
 app.use("/api/blogs", blogRoutes)
+app.use("/api/tech-icons", techIconsRoute); 
 
 // ✅ Start server
 app.listen(port, () => {

@@ -48,7 +48,7 @@ function Projects() {
   return (
   <section className="py-10 px-4 sm:px-6">
     <h2 className="text-3xl font-bold text-center mb-12 font-heading text-base-200">
-      All Projects
+      All Dashboards
     </h2>
 
     <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 justify-center items-center pb-10">
@@ -65,7 +65,7 @@ function Projects() {
             className="btn btn-outline text-base-200 hover:text-white text-lg sm:text-xl px-6 py-3"
             onClick={handleAddProject}
           >
-            Add Project
+            Add Dashboard
           </button>
           <button
             className="btn btn-error bg-red-600 text-black text-lg sm:text-2xl px-6 py-3 hover:bg-red-800 hover:text-slate-200"
