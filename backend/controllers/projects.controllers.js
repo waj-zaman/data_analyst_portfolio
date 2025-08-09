@@ -1,4 +1,4 @@
-import Projects from "../models/projects.model.js";
+import Projects from "../models/tableau.projects.model.js";
 import dotenv from 'dotenv';
 import { v2 as cloudinary } from 'cloudinary';
 

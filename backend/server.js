@@ -13,6 +13,7 @@ import leetcode from "./routes/leetcode.routes.js"
 import codewars from "./routes/codewars.routes.js"
 import blogRoutes from "./routes/blog.routes.js"
 import techIconsRoute from './routes/techIcons.routes.js';
+import websites from './routes/webDevProject.routes.js';
 
 dotenv.config();
 const port = process.env.PORT || 4000;
@@ -57,6 +58,7 @@ app.use("/api/leetcode", leetcode)
 app.use("/api/codewars", codewars)
 app.use("/api/blogs", blogRoutes)
 app.use("/api/tech-icons", techIconsRoute); 
+app.use("/api/websites", websites);
 
 // ✅ Start server
 app.listen(port, () => {
