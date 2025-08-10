@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import WebsitePreview from "../pages/webDev/WebsitePreview";
 import api from "../utilities/api";
 
@@ -10,15 +9,20 @@ export const WebDev = () => {
 
   useEffect(() => {
     const fetchIcons = async () => {
-      api.get("/tech-icons")
-          .then(res => {setTechIcons(res.data); setLoading(false)})
-          .catch(err => console.error("Error Fetching the tech icons: ", err))
-          .then(setError(err));
-        
+      try {
+        const res = await api.get("/tech-icons");
+        setTechIcons(res.data);
+      } catch (err) {
+        console.error("Error Fetching the tech icons: ", err);
+        setError("Error fetching the Tech Icons.");
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchIcons();
-  }, []); // ✅ Prevents infinite re-render loop
+  }, []);
+
 
   return (
     <>

@@ -1,3 +1,11 @@
+## Render credentials
+    mohammadwajahathzaman@gmail.com (using google)
+
+## Netlify cerdentials
+    mohammadwajahathzaman@gmail.com (using google)
+
+
+
 # Sequence of Operation
 
 In this file we are going to understand how a full stack website made with MERN actually operates.
