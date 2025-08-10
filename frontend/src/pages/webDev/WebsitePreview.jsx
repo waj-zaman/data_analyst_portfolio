@@ -21,7 +21,7 @@ function WebsitePreview() {
         // Check the user's login status.
         const loggedInStatus = await checkLoggedin();
         setIsLoggedIn(loggedInStatus);
-        
+
       } catch (err) {
         console.error("Error fetching website preview:", err);
         setError("Failed to load websites. Please try again later.");
@@ -64,20 +64,25 @@ function WebsitePreview() {
         </h2>
 
         <div className="flex justify-center">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-12 w-full max-w-6xl">
-            {websites.map(website => (
-              <WebsiteCard
-                key={website._id}
-                id={website._id} // Added the id prop
-                title={website.title}
-                url={website.url}
-                description={website.description}
-                thumbnail={website.thumbnail}
-                isLoggedIn={isLoggedIn} // Passed isLoggedIn to hide edit/delete buttons
-              />
-            ))}
-          </div>
+          {websites.length === 0 ? (
+            <p className="text-center text-gray-400">No websites available yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-12 w-full max-w-6xl">
+              {websites.map(website => (
+                <WebsiteCard
+                  key={website._id}
+                  id={website._id}
+                  title={website.title}
+                  url={website.url}
+                  description={website.description}
+                  thumbnail={website.thumbnail}
+                  isLoggedIn={isLoggedIn}
+                />
+              ))}
+            </div>
+          )}
         </div>
+
 
         <div className="text-center mt-8">
           <Link
