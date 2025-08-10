@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import WebsitePreview from "../pages/webDev/WebsitePreview";
+import api from "../utilities/api";
 
 export const WebDev = () => {
   const [techIcons, setTechIcons] = useState([]);
@@ -9,17 +10,11 @@ export const WebDev = () => {
 
   useEffect(() => {
     const fetchIcons = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/api/tech-icons", {
-          withCredentials: true,
-        });
-        setTechIcons(response.data); // Adjust if response shape is different
-      } catch (error) {
-        console.error("Error fetching the icons:", error);
-        setError("Error fetching the Tech Icons.");
-      } finally {
-        setLoading(false);
-      }
+      api.get("/tech-icons")
+          .then(res => {setTechIcons(res.data); setLoading(false)})
+          .catch(err => console.error("Error Fetching the tech icons: ", err))
+          .then(setError(err));
+        
     };
 
     fetchIcons();
