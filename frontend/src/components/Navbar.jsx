@@ -19,7 +19,8 @@ function Navbar() {
         {/* Desktop Links */}
         <div className="hidden lg:flex">
           <ul className="menu menu-horizontal px-1 text-xl gap-10 font-lato font-bold">
-            <li><Link to="/projects">Projects</Link></li>
+            <li><Link to="/projects">Dashboards</Link></li>
+            <li><Link to="/websites">Websites</Link></li>
             <li><Link to="/blogs">Blog</Link></li>
             <li><Link to="/">Home</Link></li>
           </ul>

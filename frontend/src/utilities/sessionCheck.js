@@ -1,11 +1,16 @@
 import api from "./api.js";
 
-
 export async function checkLoggedin() {
     try {
-        await api.get("/auth/session", { withCredentials: true });
-        return true;
-    } catch  {
+        const res = await api.get("/auth/session", { withCredentials: true });
+        
+        // Ensure backend returns a clear indicator, e.g. { loggedIn: true, user: {...} }
+        if (res.data && res.data.loggedIn) {
+            return true;
+        }
+        return false;
+    } catch (err) {
+        console.error("Session check failed:", err.message);
         return false;
     }
 }

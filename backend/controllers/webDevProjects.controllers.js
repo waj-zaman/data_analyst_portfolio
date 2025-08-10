@@ -9,8 +9,8 @@ export const addWebsite = async (req, res) => {
         const { title, url, description, features } = req.body;
         const file = req.file;
 
-        if (!title || !url || !description || !features) {
-            res.status(400).json({error: "Please enter All the Details."})
+        if (!title || !url || !description) {
+            return res.status(400).json({error: "Please enter All the Details."})
         };
 
         const existingTitle = await WebDevProjects.findOne({ title });

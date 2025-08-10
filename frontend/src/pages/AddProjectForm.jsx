@@ -181,6 +181,13 @@ export default function AddProjectForm() {
         >
           Add Project
         </button>
+        <button
+          type="button"
+          onClick={() => navigate("/projects")}
+          className="text-base sm:text-lg py-3 rounded-xl w-full transition bg-gray-600 text-white hover:bg-gray-700"
+        >
+          Cancel
+        </button>
       </form>
     </div>
   );

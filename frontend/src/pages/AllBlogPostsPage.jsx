@@ -103,6 +103,7 @@ export default function AllBlogPostsPage() {
           ))
         )}
       </div>
+      
     </section>
   );
 }

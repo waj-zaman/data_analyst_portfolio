@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import api from "../utilities/api.js"; // Import the configured Axios instance
 
 export default function Login() {
   const navigate = useNavigate();
@@ -13,36 +14,26 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
+      // Use the 'api' instance to make a POST request to the login endpoint.
+      // Axios automatically sets headers and handles cookies (withCredentials: true).
+      // It also automatically parses the JSON response.
+      const response = await api.post("/auth/login", { email, password });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Server Error:", errorText);
-        throw new Error("Invalid login. " + errorText);
-      }
-
-      let data;
-      try {
-        data = await response.json();
-      } catch (jsonErr) {
-        console.error("Invalid JSON response");
-        throw new Error("Unexpected response format.");
-      }
-
-      console.log("Login successful:");
+      console.log("Login successful:", response.data);
+      // NOTE: Using `alert` is generally not a recommended practice for user feedback
+      // in a modern React app. Consider using a state-based message or a toast notification.
       alert("Logged in successfully!");
+      
+      // Navigate to the previous page or the homepage
       navigate(location.state?.from?.pathname || "/");
 
     } catch (err) {
-      console.error("Login error:", err.message);
-      alert("Login failed: " + err.message);
+      console.error("Login error:", err);
+      // Axios error objects have a specific structure.
+      // We check for `error.response.data.message` to get a specific server message.
+      const errorMessage = err.response?.data?.message || err.message || "An unknown error occurred.";
+      alert("Login failed: " + errorMessage);
+
     } finally {
       setLoading(false);
     }

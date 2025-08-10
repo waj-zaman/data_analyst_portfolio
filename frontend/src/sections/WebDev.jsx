@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import WebsitePreview from "../pages/webDev/WebsitePreview";
 
 export const WebDev = () => {
   const [techIcons, setTechIcons] = useState([]);
@@ -49,7 +50,7 @@ export const WebDev = () => {
         )}
       </div>
 
-      
+      <WebsitePreview />
     </>
   );
 };

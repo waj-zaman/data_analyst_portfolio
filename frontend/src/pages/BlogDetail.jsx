@@ -29,7 +29,7 @@ export default function BlogDetail() {
 
   return (
     <section className="flex flex-col items-center text-black px-4 sm:px-6">
-      <div className="max-w-4xl w-full my-10 p-6 sm:p-8 bg-gray-600 shadow-lg rounded-xl space-y-6">
+      <div className="max-w-7xl w-full my-10 p-6 sm:p-8 bg-gray-600 shadow-lg rounded-xl space-y-6">
         <h2 className="text-2xl sm:text-3xl font-bold font-heading text-center">
           {post.title}
         </h2>

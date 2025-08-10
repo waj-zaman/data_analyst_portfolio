@@ -23,7 +23,7 @@ function ProjectDetail() {
   );
 
   return (
-    <section className="mx-auto py-10 px-4 sm:px-6 lg:px-8 max-w-screen-xl text-base-200">
+    <section className="mx-auto py-10 px-4 sm:px-6 lg:px-8 max-w-screen-2xl text-base-200">
       <h2 className="text-3xl sm:text-4xl font-bold font-heading mb-8 text-center">
         {project.title}
       </h2>
@@ -37,7 +37,13 @@ function ProjectDetail() {
         </p>
       </div>
 
-      <div className="mb-12">
+      <div>
+        <h3 className="font-heading text-2xl text-blue-500">
+          <a href={project.tableauLink}>Tableau Public Link</a>
+        </h3>
+      </div>
+
+      <div className="my-12">
         <h3 className="font-heading font-bold text-2xl sm:text-3xl pb-4">
           Interactive Dashboard:
         </h3>
@@ -64,6 +70,14 @@ function ProjectDetail() {
           </ul>
         </div>
       )}
+      <div className="flex items-center justify-center">
+        <button
+          onClick={() => window.history.back()}
+          className="btn text-xl font-body bg-gray-600 text-white rounded-lg px-8 py-3 hover:bg-gray-700 transition"
+        >
+          Go Back
+        </button>
+      </div>
     </section>
   );
 }

@@ -16,6 +16,11 @@ import AddBlog from "./pages/AddBlogPostPage";
 import UpdateBlog from "./pages/UpdateBlogPostPage";
 import BlogDetail from "./pages/BlogDetail";
 
+import Websites from "./pages/webDev/Websites"
+import AddWebsiteForm from "./pages/webDev/AddWebsiteForm";
+import UpdateWebsiteForm from "./pages/webDev/UpdateWebsiteForm";
+import WebsiteDetail from "./pages/webDev/WebsiteDetail";
+
 function App() {
 
   return (
@@ -36,6 +41,12 @@ function App() {
           <Route path="/blogs/add" element={<AddBlog />} />
           <Route path="/blogs/update/:id" element={<UpdateBlog />} />
           <Route path="/blogs/:id" element={<BlogDetail />} />
+
+          {/* Website routes */}
+          <Route path="/websites" element={<Websites />} />
+          <Route path="/websites/add" element={<AddWebsiteForm />}/>
+          <Route path="/websites/update/:id" element={<UpdateWebsiteForm />}/>
+          <Route path="/websites/:id" element={<WebsiteDetail />}/>
         </Routes>
       </main>
 

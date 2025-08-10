@@ -20,7 +20,7 @@ function TableauEmbed({ url }) {
     vizRef.current = new tableau.Viz(ref.current, url, {
       width: '100%',
       height: ref.current.offsetHeight,
-      hideTabs: true,
+      hideTabs: false,
       hideToolbar: false,
       onFirstInteractive: () => {
         console.log("Viz is interactive!");
@@ -40,7 +40,7 @@ function TableauEmbed({ url }) {
 
   return (
     <div
-      className="
+      className=" flex items-center
         w-full
         h-[600px]
         sm:h-[700px]
@@ -59,3 +59,5 @@ function TableauEmbed({ url }) {
 }
 
 export default TableauEmbed;
+
+// check the site https://help.tableau.com/current/api/embedding_api/en-us/docs/embedding_api_react.html#prerequisites

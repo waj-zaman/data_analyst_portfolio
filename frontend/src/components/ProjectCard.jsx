@@ -24,7 +24,7 @@ function ProjectCard({ project, isLoggedIn, onDelete }) {
     <div
       className="relative group w-full h-80 rounded-xl overflow-hidden shadow-lg"
       style={{
-        backgroundImage: `url(${project.imageUrl})`,
+        backgroundImage: `url(${project.imageUrl || "https://placehold.co/400x320/E5E7EB/4B5563?text=No+Image"})`,
         backgroundSize: "cover",
         backgroundPosition: "center"
       }}

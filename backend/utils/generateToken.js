@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 export const generateTokenAndSetCookie = (user_id, res) => {
   const token = jwt.sign({ user_id }, process.env.JWT_SECRET, {
@@ -7,8 +7,8 @@ export const generateTokenAndSetCookie = (user_id, res) => {
 
   res.cookie("jwt", token, {
     httpOnly: true,
-    secure: true, // ✅ Boolean
-    sameSite: "none",
+    secure: process.env.NODE_ENV === "production", // only secure in prod
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
   });
 };
