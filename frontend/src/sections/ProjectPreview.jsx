@@ -41,7 +41,6 @@ function ProjectPreview() {
           )}
         </div>
 
-        {!loading && !error && projects.length > 0 && (
           <div className="text-center mt-8">
             <Link
               to="/projects"
@@ -50,7 +49,7 @@ function ProjectPreview() {
               All Dashboards
             </Link>
           </div>
-        )}
+        
       </section>
     </div>
   );
