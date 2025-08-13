@@ -1,41 +1,29 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import api from "../utilities/api.js"; // Import the configured Axios instance
+
+import { useDispatch, useSelector } from "react-redux";
+import { loginThunk, selectAuth } from "../store/authSlice.js";
 
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const dispatch = useDispatch();
+  const { status } = useSelector(selectAuth);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  const loading = status === "loading";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      // Use the 'api' instance to make a POST request to the login endpoint.
-      // Axios automatically sets headers and handles cookies (withCredentials: true).
-      // It also automatically parses the JSON response.
-      const response = await api.post("/auth/login", { email, password });
-
-      console.log("Login successful:", response.data);
-      // NOTE: Using `alert` is generally not a recommended practice for user feedback
-      // in a modern React app. Consider using a state-based message or a toast notification.
+    const res = await dispatch(loginThunk({ email, password }));
+    if (loginThunk.fulfilled.match(res)) {
       alert("Logged in successfully!");
-      
-      // Navigate to the previous page or the homepage
       navigate(location.state?.from?.pathname || "/");
-
-    } catch (err) {
-      console.error("Login error:", err);
-      // Axios error objects have a specific structure.
-      // We check for `error.response.data.message` to get a specific server message.
-      const errorMessage = err.response?.data?.message || err.message || "An unknown error occurred.";
-      alert("Login failed: " + errorMessage);
-
-    } finally {
-      setLoading(false);
+    } else {
+      alert(res.payload || "Login failed");
     }
   };
 
@@ -75,7 +63,15 @@ export default function Login() {
         >
           {loading ? "Logging in..." : "Login"}
         </button>
-      </form>
-    </div>
+        {/* Back Button */}
+        <button
+          type="button"
+          onClick={() => navigate(location.state?.from?.pathname || "/")}
+        className="text-base sm:text-lg py-3 rounded-xl w-full transition bg-gray-600 text-white hover:bg-gray-700"
+        >
+        Cancel
+      </button>
+    </form>
+    </div >
   );
 }

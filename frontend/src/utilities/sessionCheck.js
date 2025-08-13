@@ -1,6 +1,7 @@
 import api from "./api.js";
 
 export async function checkLoggedin() {
+    console.trace("checkLoggedin() was called");
     try {
         const res = await api.get("/auth/session", { withCredentials: true });
         

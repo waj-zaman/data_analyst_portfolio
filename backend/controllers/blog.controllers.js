@@ -81,7 +81,6 @@ export const getAllPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Blog Id:", id);
     const post = await BlogPost.findById(req.params.id);
     if (!post) {
       return res.status(404).json({ error: "Post not found." });

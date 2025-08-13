@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../utilities/api';
+import api from '../../utilities/api';
 
-export default function UpdateProjectPage() {
+export default function UpdateDashboardPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ export default function UpdateProjectPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get(`/projects/${id}`)
+    api.get(`/dashboards/${id}`)
       .then(res => {
         const data = res.data;
         setTitle(data.title || '');
@@ -48,15 +48,15 @@ export default function UpdateProjectPage() {
         formData.append('imageUrl', newImageFile);
       }
 
-      await api.put(`/projects/${id}`, formData, {
+      await api.put(`/dashboards/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      alert('Project updated successfully!');
-      navigate('/projects');
+      alert('Dashboard updated successfully!');
+      navigate('/dashboards');
     } catch (err) {
-      console.error('Error updating project:', err);
-      alert('Failed to update project.');
+      console.error('Error updating dashboard:', err);
+      alert('Failed to update dashboard.');
     }
   };
 
@@ -70,11 +70,11 @@ export default function UpdateProjectPage() {
         onSubmit={handleSubmit}
         className="w-full max-w-2xl mx-auto p-4 sm:p-6 bg-base-100 shadow-lg rounded-xl space-y-4 overflow-y-auto max-h-[90vh]"
       >
-        <h2 className="text-2xl sm:text-3xl text-center font-bold mb-4">Update Project</h2>
+        <h2 className="text-2xl sm:text-3xl text-center font-bold mb-4">Update Dashboard</h2>
 
         <input
           type="text"
-          placeholder="Project Title"
+          placeholder="Dashboard Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
@@ -128,7 +128,7 @@ export default function UpdateProjectPage() {
             <p className="text-base-200 mb-2">Current Image:</p>
             <img
               src={existingImageUrl}
-              alt="Existing Project"
+              alt="Existing Dashboard."
               className="w-full max-h-64 sm:max-h-80 object-cover rounded mb-2"
             />
           </div>
@@ -145,7 +145,7 @@ export default function UpdateProjectPage() {
           type="submit"
           className="text-lg bg-blue-500 mt-6 sm:mt-10 transition-all text-slate-800 py-2 rounded-xl hover:bg-blue-900 hover:text-white w-full"
         >
-          Update Project
+          Update Dashboard
         </button>
       </form>
     </div>

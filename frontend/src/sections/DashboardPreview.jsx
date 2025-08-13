@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ProjectCard from "../components/ProjectCard";
+import DashboardCard from "../components/DashboardCard";
 import api from "../utilities/api";
 
-function ProjectPreview() {
-  const [projects, setProjects] = useState([]);
+import { useSelector } from "react-redux";
+import { selectIsLoggedIn } from "../store/authSlice";
+
+function DashboardPreview() {
+  const [dashboards, setDashboards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
   useEffect(() => {
-    api.get("/projects?limit=4")
-      .then(res => setProjects(res.data))
+    api.get("/dashboards?limit=4")
+      .then(res => setDashboards(res.data))
       .catch(err => {
         console.error("Error fetching project preview:", err);
-        setError("Failed to load projects. Please try again later.");
+        setError("Failed to load dashboards. Please try again later.");
       })
       .finally(() => setLoading(false));
   }, []);
@@ -30,12 +35,12 @@ function ProjectPreview() {
             <p className="text-center text-white">Loading projects...</p>
           ) : error ? (
             <p className="text-center text-red-500">{error}</p>
-          ) : projects.length === 0 ? (
+          ) : dashboards.length === 0 ? (
             <p className="text-center text-gray-400">No dashboards available yet.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-12 w-full max-w-6xl">
-              {projects.map(project => (
-                <ProjectCard key={project._id} project={project} />
+              {dashboards.map(dashboard => (
+                <DashboardCard key={dashboard._id} dashboard={dashboard} isLoggedIn={isLoggedIn} />
               ))}
             </div>
           )}
@@ -43,7 +48,7 @@ function ProjectPreview() {
 
           <div className="text-center mt-8">
             <Link
-              to="/projects"
+              to="/dashboards"
               className="btn btn-outline hover:bg-[#FFFBDE] hover:text-base-200 text-lg md:text-xl rounded-lg font-heading"
             >
               All Dashboards
@@ -55,4 +60,4 @@ function ProjectPreview() {
   );
 }
 
-export default ProjectPreview;
+export default DashboardPreview;

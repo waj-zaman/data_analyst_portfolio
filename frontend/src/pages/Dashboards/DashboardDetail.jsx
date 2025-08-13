@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import api from "../utilities/api.js";
-import TableauEmbed from "../components/TableauEmbed.jsx";
+import api from "../../utilities/api.js";
+import TableauEmbed from "../../components/TableauEmbed.jsx";
+import { useNavigate } from "react-router-dom";
 
-function ProjectDetail() {
+function DashboardDetail() {
   const { id } = useParams();
-  const [project, setProject] = useState(null);
+  const [dashboard, setDashboard] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    api.get(`/projects/${id}`)
-      .then((res) => setProject(res.data))
+    api.get(`/dashboards/${id}`)
+      .then((res) => setDashboard(res.data))
       .catch((err) => console.error("Error fetching project details:", err));
   }, [id]);
 
-  if (!project) {
+  if (!dashboard) {
     return <div className="text-center py-20">Loading...</div>;
   }
 
   // Clean steps: remove empty/null/whitespace-only strings
-  const validSteps = project.steps?.filter(
+  const validSteps = dashboard.steps?.filter(
     (step) => step && step.trim() !== ""
   );
 
   return (
     <section className="mx-auto py-10 px-4 sm:px-6 lg:px-8 max-w-screen-2xl text-base-200">
       <h2 className="text-3xl sm:text-4xl font-bold font-heading mb-8 text-center">
-        {project.title}
+        {dashboard.title}
       </h2>
 
       <div className="mb-12">
@@ -33,13 +35,13 @@ function ProjectDetail() {
           Description:
         </h3>
         <p className="font-body text-lg sm:text-xl text-base-100 leading-relaxed">
-          {project.description}
+          {dashboard.description}
         </p>
       </div>
 
       <div>
         <h3 className="font-heading text-2xl text-blue-500">
-          <a href={project.tableauLink}>Tableau Public Link</a>
+          <a href={dashboard.tableauLink}>Tableau Public Link</a>
         </h3>
       </div>
 
@@ -48,7 +50,7 @@ function ProjectDetail() {
           Interactive Dashboard:
         </h3>
         <div className="rounded-lg overflow-visible">
-          <TableauEmbed url={project.tableauLink} />
+          <TableauEmbed url={dashboard.tableauLink} />
         </div>
       </div>
 
@@ -72,14 +74,14 @@ function ProjectDetail() {
       )}
       <div className="flex items-center justify-center">
         <button
-          onClick={() => window.history.back()}
+          onClick={() => navigate("/dashboards")}
           className="btn text-xl font-body bg-gray-600 text-white rounded-lg px-8 py-3 hover:bg-gray-700 transition"
         >
-          Go Back
+          All Dashboards
         </button>
       </div>
     </section>
   );
 }
 
-export default ProjectDetail;
+export default DashboardDetail;

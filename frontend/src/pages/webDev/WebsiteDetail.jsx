@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../../utilities/api";
+import { useNavigate } from "react-router-dom";
 
 const WebsiteDetailSection = () => {
     // Get the website ID from the URL parameters
@@ -12,6 +13,7 @@ const WebsiteDetailSection = () => {
     // State for data fetching status
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     // Effect to fetch the website data on component mount
     useEffect(() => {
@@ -118,10 +120,10 @@ const WebsiteDetailSection = () => {
                 {/* Back Button */}
                 <div className="flex items-center justify-center">
                     <button
-                        onClick={() => window.history.back()}
+                        onClick={() => navigate("/websites")}
                         className="btn text-xl font-body bg-gray-600 text-white rounded-lg px-8 py-3 hover:bg-gray-700 transition"
                     >
-                        Go Back
+                        All Websites
                     </button>
                 </div>
 

@@ -10,7 +10,7 @@ cloudinary.config({
 });
 
 // CREATE
-export const addProject = async (req, res) => {
+export const addDashboard = async (req, res) => {
   try {
     const { title, description, technologies, githubLink, tableauLink, steps } = req.body;
     const file = req.file;
@@ -59,7 +59,7 @@ export const addProject = async (req, res) => {
 };
 
 // READ ALL
-export const getAllProjects = async (req, res) => {
+export const getAllDashboards = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 0;
     const projects = await Projects.find()
@@ -74,7 +74,7 @@ export const getAllProjects = async (req, res) => {
 };
 
 // READ ONE
-export const getAProject = async (req, res) => {
+export const getADashboard = async (req, res) => {
   try {
     const id = req.params.id;
     const project = await Projects.findById(id);
@@ -91,7 +91,7 @@ export const getAProject = async (req, res) => {
 };
 
 // DELETE
-export const deleteProject = async (req, res) => {
+export const deleteDashboard = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedProject = await Projects.findByIdAndDelete(id);
@@ -108,7 +108,7 @@ export const deleteProject = async (req, res) => {
 };
 
 // UPDATE
-export const updateProject = async (req, res) => {
+export const updateDashboard = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, technologies, githubLink, tableauLink, steps } = req.body;

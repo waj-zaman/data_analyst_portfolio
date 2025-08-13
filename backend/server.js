@@ -8,7 +8,7 @@ import morgan from 'morgan';
 import connectDB from './utils/db.js';
 
 import authRoutes from './routes/auth.routes.js'
-import projects from "./routes/projects.routes.js"
+import dashboards from "./routes/dashboards.routes.js"
 import leetcode from "./routes/leetcode.routes.js"
 import codewars from "./routes/codewars.routes.js"
 import blogRoutes from "./routes/blog.routes.js"
@@ -53,7 +53,7 @@ app.use(cors({
 
 // ✅ Routes
 app.use("/api/auth", authRoutes)
-app.use("/api/projects", projects)
+app.use("/api/dashboards", dashboards)
 app.use("/api/leetcode", leetcode)
 app.use("/api/codewars", codewars)
 app.use("/api/blogs", blogRoutes)

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import api from "../utilities/api.js";
+import api from "../../utilities/api.js";
 import { useNavigate } from "react-router-dom";
 
-export default function AddProjectForm() {
+export default function AddDashboardForm() {
   const navigate = useNavigate();
 
   const [authorized, setAuthorized] = useState(false);
@@ -17,29 +17,11 @@ export default function AddProjectForm() {
   const [imageUrl, setImageUrl] = useState(null);
 
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        await api.get("/auth/session", { withCredentials: true });
-        setAuthorized(true);
-      } catch (error) {
-        console.error("Not Logged in:", error);
-        navigate("/auth/login");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkSession();
+    setLoading(false);
   }, [navigate]);
 
-  useEffect(() => {
-    if (!loading && !authorized) {
-      navigate("/auth/login");
-    }
-  }, [loading, authorized, navigate]);
 
   if (loading) return <div className="text-center p-10">Loading...</div>
-  if (!authorized) return null;
 
   const handleStepChange = (index, value) => {
     const updated = [...steps];
@@ -69,17 +51,17 @@ export default function AddProjectForm() {
       formData.append(`steps[${index}]`, step);
     });
 
-    await api.post("/projects/add", formData, {
+    await api.post("/dashboards/add", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       }
     });
 
-    alert("Project added successfully!");
-    navigate("/projects");
+    alert("Dashboard added successfully!");
+    navigate("/dashboards");
   } catch (err) {
-    console.error("Error adding project:", err);
-    alert("Failed to add project: " + (err.response?.data?.error || err.message));
+    console.error("Error adding dashbaord:", err);
+    alert("Failed to add dashboard: " + (err.response?.data?.error || err.message));
   }
 };
 
@@ -90,12 +72,12 @@ export default function AddProjectForm() {
         onSubmit={handleSubmit}
         className="w-full max-w-lg md:max-w-2xl bg-base-100 shadow-lg rounded-xl p-6 md:p-8 space-y-6 overflow-y-auto max-h-[90vh]"
       >
-        <h2 className="text-2xl sm:text-3xl text-center font-bold text-white">Add New Project</h2>
+        <h2 className="text-2xl sm:text-3xl text-center font-bold text-white">Add New Dashboard</h2>
 
         <input
           type="text"
           className="border-2 text-base sm:text-lg px-4 py-2 rounded-lg text-white w-full bg-base-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          placeholder="Project Title"
+          placeholder="Dashboard Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
@@ -103,7 +85,7 @@ export default function AddProjectForm() {
 
         <textarea
           className="border-2 text-base sm:text-lg px-4 py-2 rounded-lg text-white w-full bg-base-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          placeholder="Project Description"
+          placeholder="Dashboard Description"
           rows={3}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -130,7 +112,7 @@ export default function AddProjectForm() {
         <input
           type="url"
           className="border-2 text-base sm:text-lg px-4 py-2 rounded-lg text-white w-full bg-base-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          placeholder="Tableau Link"
+          placeholder="Tableau Public Link"
           value={tableauLink}
           onChange={(e) => setTableauLink(e.target.value)}
         />
@@ -177,13 +159,13 @@ export default function AddProjectForm() {
 
         <button
           type="submit"
-          className="text-base sm:text-lg bg-blue-600 text-slate-800 py-3 rounded-xl hover:bg-blue-900 hover:text-white w-full transition"
+          className="text-base sm:text-lg bg-blue-600 text-slate-800 font-bold py-3 rounded-xl hover:bg-blue-900 hover:text-white w-full transition"
         >
-          Add Project
+          Add Dashboard
         </button>
         <button
           type="button"
-          onClick={() => navigate("/projects")}
+          onClick={() => navigate("/dashboards")}
           className="text-base sm:text-lg py-3 rounded-xl w-full transition bg-gray-600 text-white hover:bg-gray-700"
         >
           Cancel

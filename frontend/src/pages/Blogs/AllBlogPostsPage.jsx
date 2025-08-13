@@ -1,51 +1,43 @@
 import React, { useEffect, useState } from "react";
-import BlogPostCard from "../components/BlogPostCard";
+import BlogPostCard from "../../components/BlogPostCard";
 import { useNavigate, useLocation } from "react-router-dom";
-import { checkLoggedin } from "../utilities/sessionCheck";
-import api from "../utilities/api.js";
+import api from "../../utilities/api.js";
+
+import { useSelector } from "react-redux";
+import { selectIsLoggedIn } from "../../store/authSlice.js";
 
 export default function AllBlogPostsPage() {
   const [posts, setPosts] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
   useEffect(() => {
-    const fetchPostsAndAuth = async () => {
+    const fetchBlogPosts = async () => {
       try {
-        const [postRes, isLoggedIn] = await Promise.all([
-          api.get("/blogs"),
-          checkLoggedin(),
-        ]);
-        setPosts(postRes.data);
-        setIsLoggedIn(isLoggedIn);
+        const blogsResponse = await api.get("/blogs");
+        setPosts(blogsResponse.data);
       } catch (err) {
-        console.error("Error:", err);
+        console.error("Error in fetching blog posts:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPostsAndAuth();
+    fetchBlogPosts();
   }, []);
 
   const handleLogin = () => {
     navigate("/auth/login", { state: { from: location } });
   };
 
-  const handleLogout = async () => {
-    try {
-      await api.post("/auth/logout", {}, { withCredentials: true });
-      setIsLoggedIn(false);
-      alert("Logged Out Successfully.");
-    } catch (error) {
-      console.error("Logout Error:", error);
-      alert("Logout Failed.");
-    }
-  };
 
-  const handleAddPost = () => navigate("/blogs/add");
+  const handleAddPost = () => {
+    if (!isLoggedIn) return handleLogin();
+    navigate("/blogs/add");
+  };
 
   const handleDeletePost = (deletedId) => {
     setPosts((prev) => prev.filter((post) => post._id !== deletedId));
@@ -63,29 +55,14 @@ export default function AllBlogPostsPage() {
         </h2>
 
         <div className="flex flex-wrap gap-4 justify-center mb-10">
-          {!isLoggedIn ? (
-            <button
-              className="btn btn-outline text-base-200 hover:text-white text-lg sm:text-xl px-6 py-2"
-              onClick={handleLogin}
-            >
-              Login
-            </button>
-          ) : (
-            <>
+          {isLoggedIn && 
               <button
                 className="btn btn-outline text-base-200 hover:text-white text-lg sm:text-xl px-6 py-2"
                 onClick={handleAddPost}
               >
                 Add Post
               </button>
-              <button
-                className="btn btn-error bg-red-600 text-white text-lg sm:text-xl px-6 py-2 hover:bg-red-800"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </>
-          )}
+            }
         </div>
       </div>
 
@@ -102,6 +79,14 @@ export default function AllBlogPostsPage() {
             />
           ))
         )}
+      </div>
+      <div className="flex items-center justify-center mt-10">
+        <button
+          onClick={() => navigate("/")}
+          className="btn text-xl font-body bg-gray-600 text-white rounded-lg px-8 py-3 hover:bg-gray-700 transition"
+        >
+          Home
+        </button>
       </div>
       
     </section>

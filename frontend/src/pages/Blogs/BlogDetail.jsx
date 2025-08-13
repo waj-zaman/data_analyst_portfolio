@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../utilities/api";
+import api from "../../utilities/api";
 
 export default function BlogDetail() {
   const { id } = useParams();

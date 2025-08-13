@@ -14,6 +14,6 @@ router.post("/login", login);
 router.post("/logout", logout);
 
 // Session check (protected route)
-router.get("/session", protectRoute, session);
+router.get("/me", protectRoute, session);
 
 export default router;

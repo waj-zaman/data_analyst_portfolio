@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../utilities/api.js";
+import api from "../../utilities/api.js";
 
-export default function AddBlogPostPage() {
+export default function AddBlogPostForm() {
   const navigate = useNavigate();
 
   const [authorized, setAuthorized] = useState(false);
@@ -15,23 +15,10 @@ export default function AddBlogPostPage() {
 
   // Check session on mount
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        await api.get("/auth/session", { withCredentials: true });
-        setAuthorized(true);
-      } catch (error) {
-        console.error("Not Logged in:", error);
-        navigate("/auth/login");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkSession();
+    setLoading(false)
   }, [navigate]);
 
-  if (loading) return <div className="text-center p-10">Loading...</div>;
-  if (!authorized) return null;
+  if (loading) return <div className="text-center p-10">Loading...</div>; 
 
   // Add new block
   const addBlock = (type) => {
@@ -204,6 +191,14 @@ export default function AddBlogPostPage() {
           className="text-xl bg-blue-500 mt-10 transition-all text-slate-800 py-2 rounded-xl hover:bg-blue-900 hover:text-white w-full"
         >
           Add Blog Post
+        </button>
+        {/* Back Button */}
+        <button
+          type="button"
+          onClick={() => navigate("/websites")}
+          className="text-base sm:text-lg py-3 rounded-xl w-full transition bg-gray-600 text-white hover:bg-gray-700"
+        >
+          Cancel
         </button>
       </form>
     </div>

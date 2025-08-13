@@ -4,11 +4,15 @@ import WebsiteCard from "../webDev/WebsiteCard";
 import api from "../../utilities/api";
 import { checkLoggedin } from "../../utilities/sessionCheck";
 
+import { useSelector } from "react-redux";
+import { selectIsLoggedIn } from "../../store/authSlice";
+
 function WebsitePreview() {
   const [websites, setWebsites] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   useEffect(() => {
     // We use an async function inside useEffect to handle both API calls.
@@ -17,11 +21,6 @@ function WebsitePreview() {
         // Fetch the websites with a limit.
         const websitesResponse = await api.get("/websites?limit=4");
         setWebsites(websitesResponse.data);
-
-        // Check the user's login status.
-        const loggedInStatus = await checkLoggedin();
-        setIsLoggedIn(loggedInStatus);
-
       } catch (err) {
         console.error("Error fetching website preview:", err);
         setError("Failed to load websites. Please try again later.");

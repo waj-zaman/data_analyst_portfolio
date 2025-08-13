@@ -2,16 +2,19 @@ import React, { useEffect, useState } from "react";
 import WebsiteCard from "../webDev/WebsiteCard"; // Assuming WebsiteCard is in this relative path
 import api from "../../utilities/api";
 import { useLocation, useNavigate } from "react-router-dom";
-import { checkLoggedin } from "../../utilities/sessionCheck";
+
+import { useSelector } from "react-redux";
+import { selectIsLoggedIn } from "../../store/authSlice";
 
 function Websites() {
   const [websites, setWebsites] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
-  
+
   const navigate = useNavigate();
+
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   // Fetches websites and checks login status on component mount.
   useEffect(() => {
@@ -20,9 +23,6 @@ function Websites() {
         const websitesResponse = await api.get("/websites");
         setWebsites(websitesResponse.data);
 
-        const loggedInStatus = await checkLoggedin();
-        setIsLoggedIn(loggedInStatus);
-        
       } catch (err) {
         console.error("Error fetching websites:", err);
         setError("Failed to load websites.");
@@ -40,25 +40,15 @@ function Websites() {
       currentWebsites.filter(website => website._id !== deletedWebsiteId)
     );
   };
-  
+
   // Handlers for navigation and authentication.
   const handleLogin = () => {
-    navigate("/auth/login", { state: { from: location }});
+    navigate("/auth/login", { state: { from: location } });
   };
 
-  const handleLogout = async () => {
-    try {
-      await api.post("/auth/logout", {}, { withCredentials: true });
-      setIsLoggedIn(false);
-      // NOTE: Replace alert with a more modern UI component for better UX.
-      alert("Logged Out Successfully.");
-    } catch (error) {
-      console.error("Error logging out:", error);
-      alert("Logout Failed.");
-    }
-  };
 
   const handleAddWebsite = () => {
+    if (!isLoggedIn) return handleLogin();
     navigate("/websites/add");
   };
 
@@ -79,28 +69,13 @@ function Websites() {
 
       {/* Login / Add / Logout Buttons */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 justify-center items-center pb-10">
-        {!isLoggedIn ? (
+        {isLoggedIn && (
           <button
             className="btn btn-outline text-base-200 hover:text-white text-lg sm:text-xl px-6 py-3"
-            onClick={handleLogin}
+            onClick={handleAddWebsite}
           >
-            Login
+            Add Website
           </button>
-        ) : (
-          <>
-            <button
-              className="btn btn-outline text-base-200 hover:text-white text-lg sm:text-xl px-6 py-3"
-              onClick={handleAddWebsite}
-            >
-              Add Website
-            </button>
-            <button
-              className="btn btn-error bg-red-600 text-black text-lg sm:text-2xl px-6 py-3 hover:bg-red-800 hover:text-slate-200"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          </>
         )}
       </div>
 
@@ -130,10 +105,10 @@ function Websites() {
       </div>
       <div className="flex items-center justify-center mt-10">
         <button
-          onClick={() => window.history.back()}
+          onClick={() => navigate("/")}
           className="btn text-xl font-body bg-gray-600 text-white rounded-lg px-8 py-3 hover:bg-gray-700 transition"
         >
-          Go Back
+          Home
         </button>
       </div>
     </section>

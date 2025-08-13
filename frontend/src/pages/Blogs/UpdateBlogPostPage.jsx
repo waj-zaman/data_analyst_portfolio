@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../utilities/api.js";
+import api from "../../utilities/api.js";
 
 export default function UpdateBlogPostPage() {
   const { id } = useParams();
