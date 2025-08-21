@@ -33,14 +33,6 @@ function App() {
     dispatch(loadSession());
   }, [dispatch]);
 
-  if(!isInitialized) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-white">
-        Loading session...
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFBDE]">
       <Navbar />
