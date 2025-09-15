@@ -74,13 +74,13 @@ function DashboardDetail() {
       </div>
 
       {/* Dataset Description */}
-      <div className="flex pb-3 mt-2">
+      <div className="pb-3 mt-2">
         <h3 className="text-2xl font-heading font-semibold">Dataset Description :</h3>
         <p className="text-2xl font-body pl-2">{dashboard.datasetDescription}</p>
       </div>
 
       {/* Problem Statement */}
-      <div className="flex pb-3 mt-2">
+      <div className="pb-3 mt-2">
         <h3 className="text-2xl font-heading font-semibold">Problem Statement :</h3>
         <p className="text-2xl font-body pl-2">{dashboard.problemStatement}</p>
       </div>
