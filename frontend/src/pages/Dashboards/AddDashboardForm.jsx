@@ -263,7 +263,7 @@ export default function AddDashboardForm() {
         </div>
 
         {/* Links */}
-        <label className="block text-white font-semibold">CSV to DB Link</label>
+        <label className="block text-white font-semibold">CSV to DB Link [ Raw address from git hub ]</label>
         <input
           type="url"
           placeholder="CSV To DB Link"
@@ -273,7 +273,7 @@ export default function AddDashboardForm() {
           disabled={submitting}
         />
 
-        <label className="block text-white font-semibold">EDA with SQL Notebook</label>
+        <label className="block text-white font-semibold">EDA with SQL Notebook [ Notebook address from git hub ]</label>
         <input
           type="url"
           placeholder="EDA with SQL Notebook Link"
@@ -284,7 +284,7 @@ export default function AddDashboardForm() {
         />
 
         <label className="block text-white font-semibold">
-          Ingestion After Cleaning Notebook
+          Ingestion After Cleaning Notebook [ Raw address from git hub ]
         </label>
         <input
           type="url"
@@ -295,7 +295,7 @@ export default function AddDashboardForm() {
           disabled={submitting}
         />
 
-        <label className="block text-white font-semibold">EDA with Python Notebook</label>
+        <label className="block text-white font-semibold">EDA with Python Notebook [ Notebook page from git GitHub ]</label>
         <input
           type="url"
           placeholder="EDA with Python Notebook Link"
