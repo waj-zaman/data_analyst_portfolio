@@ -1,23 +1,41 @@
-import express from 'express';
-import upload from '../utils/multer.js';
+import express from "express";
+import upload from "../utils/multer.js";
 
 import {
   addDashboard,
   updateDashboard,
   deleteDashboard,
   getADashboard,
-  getAllDashboards
-} from '../controllers/projects.controllers.js';
+  getAllDashboards,
+} from "../controllers/projects.controllers.js";
 
-import { protectRoute } from '../utils/protectRoute.js';
+import { protectRoute } from "../utils/protectRoute.js";
 
 const router = express.Router();
 
 // Create
-router.post("/add", protectRoute, upload.single('imageUrl'), addDashboard);
+router.post(
+  "/add",
+  protectRoute,
+  upload.fields([
+    { name: "report", maxCount: 1 },
+    { name: "approach", maxCount: 1 },
+    { name: "imageUrl", maxCount: 1 },
+  ]),
+  addDashboard
+);
 
 // Update
-router.put("/:id", protectRoute, upload.single('imageUrl'), updateDashboard);
+router.put(
+  "/:id",
+  protectRoute,
+  upload.fields([
+    { name: "report", maxCount: 1 },
+    { name: "approach", maxCount: 1 },
+    { name: "imageUrl", maxCount: 1 },
+  ]),
+  updateDashboard
+);
 
 // Delete
 router.delete("/:id", protectRoute, deleteDashboard);

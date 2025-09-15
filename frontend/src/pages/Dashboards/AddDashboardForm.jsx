@@ -5,168 +5,368 @@ import { useNavigate } from "react-router-dom";
 export default function AddDashboardForm() {
   const navigate = useNavigate();
 
-  const [authorized, setAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [technologies, setTechnologies] = useState("");
-  const [githubLink, setGithubLink] = useState("");
+  // Schema fields
+  const [projectTitle, setProjectTitle] = useState("");
+  const [datasetName, setDatasetName] = useState("");
+  const [datasetCategory, setDatasetCategory] = useState("");
+  const [datasetDescription, setDatasetDescription] = useState("");
+  const [problemStatement, setProblemStatement] = useState("");
+  const [analyticalQuestions, setAnalyticalQuestions] = useState([""]);
+  const [technologies, setTechnologies] = useState([""]);
+  const [csvToDB, setCsvToDB] = useState("");
+  const [edaWithSQL, setEdaWithSQL] = useState("");
+  const [ingestionAfterCleaning, setIngestionAfterCleaning] = useState("");
+  const [edaWithPython, setEdaWithPython] = useState("");
   const [tableauLink, setTableauLink] = useState("");
-  const [steps, setSteps] = useState([""]);
-  const [imageUrl, setImageUrl] = useState(null);
+  const [report, setReport] = useState(null); // file
+  const [approach, setApproach] = useState(null); // file
+  const [githubLink, setGithubLink] = useState("");
+  const [imageUrl, setImageUrl] = useState(null); // file
 
   useEffect(() => {
     setLoading(false);
   }, [navigate]);
 
+  if (loading) return <div className="text-center p-10">Loading...</div>;
 
-  if (loading) return <div className="text-center p-10">Loading...</div>
-
-  const handleStepChange = (index, value) => {
-    const updated = [...steps];
+  // Helpers for arrays
+  const handleArrayChange = (setter, arr, index, value) => {
+    const updated = [...arr];
     updated[index] = value;
-    setSteps(updated);
+    setter(updated);
   };
 
-  const addStep = () => setSteps([...steps, ""]);
-  const removeStep = (index) => {
-    const updated = [...steps];
+  const addArrayItem = (setter, arr) => setter([...arr, ""]);
+  const removeArrayItem = (setter, arr, index) => {
+    const updated = [...arr];
     updated.splice(index, 1);
-    setSteps(updated);
+    setter(updated);
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    setSubmitting(true);
 
-  try {
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("technologies", technologies);
-    formData.append("githubLink", githubLink);
-    formData.append("tableauLink", tableauLink);
-    formData.append("imageUrl", imageUrl);
-    steps.forEach((step, index) => {
-      formData.append(`steps[${index}]`, step);
-    });
+    try {
+      const formData = new FormData();
+      formData.append("projectTitle", projectTitle);
+      formData.append("datasetName", datasetName);
+      formData.append("datasetCategory", datasetCategory);
+      formData.append("datasetDescription", datasetDescription);
+      formData.append("problemStatement", problemStatement);
 
-    await api.post("/dashboards/add", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+      analyticalQuestions.forEach((q, i) =>
+        formData.append(`analyticalQuestions[${i}]`, q)
+      );
+      technologies.forEach((t, i) =>
+        formData.append(`technologies[${i}]`, t)
+      );
+
+      formData.append("csvToDB", csvToDB);
+      formData.append("edaWithSQL", edaWithSQL);
+      formData.append("ingestionAfterCleaning", ingestionAfterCleaning);
+      formData.append("edaWithPython", edaWithPython);
+      formData.append("tableauLink", tableauLink);
+      formData.append("githubLink", githubLink);
+
+      // ✅ Files
+      // ✅ Only append real files (skip empty/null)
+      if (report instanceof File) {
+        formData.append("report", report);
       }
-    });
+      if (approach instanceof File) {
+        formData.append("approach", approach);
+      }
+      if (imageUrl instanceof File) {
+        formData.append("imageUrl", imageUrl); // must match schema name exactly
+      }
 
-    alert("Dashboard added successfully!");
-    navigate("/dashboards");
-  } catch (err) {
-    console.error("Error adding dashbaord:", err);
-    alert("Failed to add dashboard: " + (err.response?.data?.error || err.message));
-  }
-};
 
+      await api.post("/dashboards/add", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      alert("Project added successfully!");
+      navigate("/dashboards");
+    } catch (err) {
+      console.error("Error adding project:", err);
+      alert(
+        "Failed to add project: " +
+        (err.response?.data?.error || err.message)
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-base-200 px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-lg md:max-w-2xl bg-base-100 shadow-lg rounded-xl p-6 md:p-8 space-y-6 overflow-y-auto max-h-[90vh]"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
+            e.preventDefault();
+          }
+        }}
+        className="w-full max-w-2xl bg-base-100 shadow-lg rounded-xl p-6 md:p-8 space-y-3 overflow-y-auto max-h-[90vh]"
       >
-        <h2 className="text-2xl sm:text-3xl text-center font-bold text-white">Add New Dashboard</h2>
+        <h2 className="text-2xl sm:text-3xl text-center font-bold text-white">
+          Add New Project
+        </h2>
 
+        {/* Project Title */}
+        <label className="block text-white font-semibold pt-3">Project Title</label>
         <input
           type="text"
-          className="border-2 text-base sm:text-lg px-4 py-2 rounded-lg text-white w-full bg-base-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          placeholder="Dashboard Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Project Title"
+          value={projectTitle}
+          onChange={(e) => setProjectTitle(e.target.value)}
           required
+          className="input input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
         />
 
+        {/* Dataset Details */}
+        <label className="block text-white font-semibold">Dataset Name</label>
+        <input
+          type="text"
+          placeholder="Dataset Name"
+          value={datasetName}
+          onChange={(e) => setDatasetName(e.target.value)}
+          className="input input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        <label className="block text-white font-semibold">Dataset Category</label>
+        <input
+          type="text"
+          placeholder="Dataset Category"
+          value={datasetCategory}
+          onChange={(e) => setDatasetCategory(e.target.value)}
+          className="input input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        <label className="block text-white font-semibold">Dataset Description</label>
         <textarea
-          className="border-2 text-base sm:text-lg px-4 py-2 rounded-lg text-white w-full bg-base-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          placeholder="Dashboard Description"
+          placeholder="Dataset Description"
+          value={datasetDescription}
+          onChange={(e) => setDatasetDescription(e.target.value)}
           rows={3}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
+          className="textarea textarea-bordered w-full text-white bg-base-200"
+          disabled={submitting}
         />
 
-        <input
-          type="text"
-          className="border-2 text-base sm:text-lg px-4 py-2 rounded-lg text-white w-full bg-base-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          placeholder="Technologies (comma separated)"
-          value={technologies}
-          onChange={(e) => setTechnologies(e.target.value)}
-          required
+        {/* Problem Statement */}
+        <label className="block text-white font-semibold">Problem Statement</label>
+        <textarea
+          placeholder="Problem Statement"
+          value={problemStatement}
+          onChange={(e) => setProblemStatement(e.target.value)}
+          rows={3}
+          className="textarea textarea-bordered w-full text-white bg-base-200"
+          disabled={submitting}
         />
 
-        <input
-          type="url"
-          className="border-2 text-base sm:text-lg px-4 py-2 rounded-lg text-white w-full bg-base-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          placeholder="GitHub Link"
-          value={githubLink}
-          onChange={(e) => setGithubLink(e.target.value)}
-        />
-
-        <input
-          type="url"
-          className="border-2 text-base sm:text-lg px-4 py-2 rounded-lg text-white w-full bg-base-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          placeholder="Tableau Public Link"
-          value={tableauLink}
-          onChange={(e) => setTableauLink(e.target.value)}
-        />
-
-        <input
-          type="file"
-          accept="image/*"
-          className="text-base sm:text-lg px-2 py-2 rounded-lg bg-base-200 w-full text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          onChange={(e) => setImageUrl(e.target.files[0])}
-        />
-
+        {/* Analytical Questions */}
         <div>
-          <label className="text-lg sm:text-xl block font-semibold mb-2 text-white">Steps:</label>
-          <div className="space-y-2">
-            {steps.map((step, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <input
-                  type="text"
-                  className="border-2 text-base sm:text-lg px-4 py-2 rounded-lg text-white w-full bg-base-200 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                  placeholder={`Step ${index + 1}`}
-                  value={step}
-                  onChange={(e) => handleStepChange(index, e.target.value)}
-                />
-                {steps.length > 1 && (
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-error"
-                    onClick={() => removeStep(index)}
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
+          <label className="block text-white font-semibold mb-2">
+            Analytical Questions
+          </label>
+          {analyticalQuestions.map((q, i) => (
+            <div key={i} className="flex items-center gap-2 mb-2">
+              <input
+                type="text"
+                value={q}
+                placeholder={`Question ${i + 1}`}
+                onChange={(e) =>
+                  handleArrayChange(
+                    setAnalyticalQuestions,
+                    analyticalQuestions,
+                    i,
+                    e.target.value
+                  )
+                }
+                className="input input-bordered w-full text-white bg-base-200"
+                disabled={submitting}
+              />
+              {analyticalQuestions.length > 1 && (
+                <button
+                  type="button"
+                  className="btn btn-error btn-sm"
+                  onClick={() =>
+                    removeArrayItem(
+                      setAnalyticalQuestions,
+                      analyticalQuestions,
+                      i
+                    )
+                  }
+                  disabled={submitting}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          ))}
           <button
             type="button"
-            className="mt-3 text-md sm:text-lg rounded-xl bg-slate-700 px-4 py-2 hover:border-2 hover:bg-slate-800 transition-all text-white w-full sm:w-auto"
-            onClick={addStep}
+            className="btn btn-sm btn-primary mt-2"
+            onClick={() =>
+              addArrayItem(setAnalyticalQuestions, analyticalQuestions)
+            }
+            disabled={submitting}
           >
-            + Add Step
+            + Add Question
           </button>
         </div>
 
+        {/* Technologies */}
+        <div>
+          <label className="block text-white font-semibold mb-2">Technologies</label>
+          {technologies.map((t, i) => (
+            <div key={i} className="flex items-center gap-2 mb-2">
+              <input
+                type="text"
+                value={t}
+                placeholder={`Technology ${i + 1}`}
+                onChange={(e) =>
+                  handleArrayChange(setTechnologies, technologies, i, e.target.value)
+                }
+                className="input input-bordered w-full text-white bg-base-200"
+                disabled={submitting}
+              />
+              {technologies.length > 1 && (
+                <button
+                  type="button"
+                  className="btn btn-error btn-sm"
+                  onClick={() =>
+                    removeArrayItem(setTechnologies, technologies, i)
+                  }
+                  disabled={submitting}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            className="btn btn-sm btn-primary mt-2"
+            onClick={() => addArrayItem(setTechnologies, technologies)}
+            disabled={submitting}
+          >
+            + Add Technology
+          </button>
+        </div>
+
+        {/* Links */}
+        <label className="block text-white font-semibold">CSV to DB Link</label>
+        <input
+          type="url"
+          placeholder="CSV To DB Link"
+          value={csvToDB}
+          onChange={(e) => setCsvToDB(e.target.value)}
+          className="input input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        <label className="block text-white font-semibold">EDA with SQL Notebook</label>
+        <input
+          type="url"
+          placeholder="EDA with SQL Notebook Link"
+          value={edaWithSQL}
+          onChange={(e) => setEdaWithSQL(e.target.value)}
+          className="input input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        <label className="block text-white font-semibold">
+          Ingestion After Cleaning Notebook
+        </label>
+        <input
+          type="url"
+          placeholder="Ingestion After Cleaning Notebook Link"
+          value={ingestionAfterCleaning}
+          onChange={(e) => setIngestionAfterCleaning(e.target.value)}
+          className="input input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        <label className="block text-white font-semibold">EDA with Python Notebook</label>
+        <input
+          type="url"
+          placeholder="EDA with Python Notebook Link"
+          value={edaWithPython}
+          onChange={(e) => setEdaWithPython(e.target.value)}
+          className="input input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        <label className="block text-white font-semibold">Tableau Link</label>
+        <input
+          type="url"
+          placeholder="Tableau Link"
+          value={tableauLink}
+          onChange={(e) => setTableauLink(e.target.value)}
+          className="input input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        {/* File Uploads */}
+        <label className="block text-white font-semibold">Upload Report (PDF)</label>
+        <input
+          type="file"
+          accept="application/pdf"
+          onChange={(e) => setReport(e.target.files[0])}
+          className="file-input file-input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        <label className="block text-white font-semibold">Upload Solution Approach (PDF)</label>
+        <input
+          type="file"
+          accept="application/pdf"
+          onChange={(e) => setApproach(e.target.files[0])}
+          className="file-input file-input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        <label className="block text-white font-semibold">GitHub Link</label>
+        <input
+          type="url"
+          placeholder="GitHub Link"
+          value={githubLink}
+          onChange={(e) => setGithubLink(e.target.value)}
+          className="input input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        <label className="block text-white font-semibold">Upload Project Image</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImageUrl(e.target.files[0])}
+          className="file-input file-input-bordered w-full text-white bg-base-200"
+          disabled={submitting}
+        />
+
+        {/* Buttons */}
         <button
           type="submit"
-          className="text-base sm:text-lg bg-blue-600 text-slate-800 font-bold py-3 rounded-xl hover:bg-blue-900 hover:text-white w-full transition"
+          className={`btn w-full ${submitting ? "btn-disabled bg-gray-500" : "btn-primary"
+            }`}
+          disabled={submitting}
         >
-          Add Dashboard
+          {submitting ? "Uploading…" : "Add Project"}
         </button>
         <button
           type="button"
           onClick={() => navigate("/dashboards")}
-          className="text-base sm:text-lg py-3 rounded-xl w-full transition bg-gray-600 text-white hover:bg-gray-700"
+          className="btn btn-secondary w-full"
+          disabled={submitting}
         >
           Cancel
         </button>
