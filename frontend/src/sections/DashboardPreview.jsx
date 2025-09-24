@@ -32,7 +32,12 @@ function DashboardPreview() {
 
         <div className="flex justify-center">
           {loading ? (
-            <p className="text-center text-white">Loading projects...</p>
+            <div className="flex flex-col items-center">
+              <span className="loading loading-spinner loading-lg text-[#FFFBDE] mb-4"></span>
+              <p className="text-center text-white text-lg">
+                Loading dashboards from the database, please wait...
+              </p>
+            </div>
           ) : error ? (
             <p className="text-center text-red-500">{error}</p>
           ) : dashboards.length === 0 ? (
@@ -44,17 +49,23 @@ function DashboardPreview() {
               ))}
             </div>
           )}
+
         </div>
 
+        <div className="text-center mt-8">
           <div className="text-center mt-8">
-            <Link
-              to="/dashboards"
-              className="btn btn-outline hover:bg-[#FFFBDE] hover:text-base-200 text-lg md:text-xl rounded-lg font-heading"
-            >
-              All Dashboards
-            </Link>
+            {!loading && !error && dashboards.length > 0 && (
+              <Link
+                to="/dashboards"
+                className="btn btn-outline hover:bg-[#FFFBDE] hover:text-base-200 text-lg md:text-xl rounded-lg font-heading"
+              >
+                All Dashboards
+              </Link>
+            )}
           </div>
-        
+
+        </div>
+
       </section>
     </div>
   );
