@@ -35,7 +35,7 @@ function DashboardPreview() {
             <div className="flex flex-col items-center">
               <span className="loading loading-spinner loading-lg text-[#FFFBDE] mb-4"></span>
               <p className="text-center text-white text-lg">
-                Loading dashboards from the database, please wait...
+                Loading dashboards from the database. This might take a minute or two, please wait...
               </p>
             </div>
           ) : error ? (

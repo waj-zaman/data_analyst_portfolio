@@ -46,6 +46,12 @@ function DashboardDetail() {
 
   return (
     <section className="mx-auto py-10 px-4 sm:px-6 lg:px-8 max-w-screen-2xl text-base-200">
+      {/* 📢 Mobile/Tablet Warning */}
+      <p className="block lg:hidden text-center text-red-600 font-medium mb-6">
+        The contents on this site will appear better on desktop screens,
+        please try it in desktop if possible.
+      </p>
+
       {/* Title */}
       <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-heading mb-8 text-center">
         {dashboard.projectTitle}
@@ -129,7 +135,7 @@ function DashboardDetail() {
           </p>
           <div
             className="bg-gray-900 text-green-300 font-mono text-sm rounded-lg shadow-md p-4 overflow-y-auto"
-            style={{ maxHeight: "400px" }}
+            style={{ maxHeight: "600px" }}
           >
             <pre className="whitespace-pre-wrap">{codeContent}</pre>
           </div>
@@ -148,7 +154,7 @@ function DashboardDetail() {
 
           <div
             className="rounded-lg shadow-md overflow-hidden"
-            style={{ height: "500px" }}
+            style={{ height: "600px" }}
           >
             <iframe
               src={`https://nbviewer.org/${dashboard.edaWithSQL}`}
@@ -171,7 +177,7 @@ function DashboardDetail() {
           </p>
           <div
             className="bg-gray-900 text-green-300 font-mono text-sm rounded-lg shadow-md p-4 overflow-y-auto"
-            style={{ maxHeight: "400px" }}
+            style={{ maxHeight: "600px" }}
           >
             <pre className="whitespace-pre-wrap">{ingestionAfterCleaning}</pre>
           </div>
@@ -190,7 +196,7 @@ function DashboardDetail() {
 
           <div
             className="rounded-lg shadow-md overflow-hidden"
-            style={{ height: "500px" }}
+            style={{ height: "600px" }}
           >
             <iframe
               src={`https://nbviewer.org/${dashboard.edaWithPython}`}
@@ -223,7 +229,7 @@ function DashboardDetail() {
           </h3>
           <div
             className="rounded-lg shadow-md overflow-hidden"
-            style={{ height: "500px" }}
+            style={{ height: "600px" }}
           >
             <iframe
               src={dashboard.report}
@@ -244,7 +250,7 @@ function DashboardDetail() {
           </h3>
           <div
             className="rounded-lg shadow-md overflow-hidden"
-            style={{ height: "500px" }}
+            style={{ height: "600px" }}
           >
             <iframe
               src={dashboard.approach}
